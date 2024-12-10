@@ -1,0 +1,41 @@
+version: '3.6'
+services:
+  payments-lite:
+    container_name: ms-payments-lite
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /opt/www/payments-lite/vendor
+      - ./payments-lite:/opt/www/payments-lite
+      - ./.docker/config/php/php.ini:/etc/php83/php.ini
+    ports:
+      - 9501:9501
+    environment:
+      - APP_ENV=dev
+      - SCAN_CACHEABLE=false
+    depends_on:
+      - payments-database
+    networks:
+      - docker_default
+  payments-database:
+    container_name: mysql-database
+    image: mysql:8
+    command: --default-authentication-plugin="mysql_native_password"
+    restart: 'always'
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
+      - ./.docker/logs/mysql:/var/log/mysql
+      - ./.docker/logs/php:/var/log/php
+    ports:
+      - 3316:3306
+    environment:
+      MYSQL_DATABASE: "payments-db"
+      MYSQL_ROOT_PASSWORD: "testehyperf123"
+      TZ: America/Sao_Paulo
+    networks:
+      - docker_default
+networks:
+  docker_default:
+    external: true
+
