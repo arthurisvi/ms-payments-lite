@@ -27,7 +27,7 @@ class TransactionService {
 
 		$this->validateTransactionConditions($payerData, $amount);
 
-		$this->transactionRepository->beginTransaction();
+		$this->transactionRepository->beginDatabaseTransaction();
 
 		try {
 
@@ -36,7 +36,7 @@ class TransactionService {
 				payeeId: $payeeId,
 				amount: $amount
 			);
-			$this->transactionRepository->createTransaction($transactionData);
+			$this->transactionRepository->create($transactionData);
 
 			$this->userService->updateBalance($payerId, -$amount, 1);
 
@@ -46,11 +46,11 @@ class TransactionService {
 				throw new UnauthorizedTransactionException();
 			}
 
-			$this->transactionRepository->commitTransaction();
+			$this->transactionRepository->commitDatabaseTransaction();
 
 			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($payeeId, $amount));
 		} catch (\Exception $e) {
-			$this->transactionRepository->rollbackTransaction();
+			$this->transactionRepository->rollbackDatabaseTransaction();
 			throw $e;
 		}
 

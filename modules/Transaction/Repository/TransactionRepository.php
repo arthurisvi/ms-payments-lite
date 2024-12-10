@@ -7,19 +7,19 @@ use Modules\Transaction\DTOs\TransactionDTO;
 
 class TransactionRepository implements TransactionRepositoryInterface {
 
-	public function beginTransaction(): void {
-		Db::beginTransaction();
+	public function beginDatabaseTransaction(): void {
+		Db::beginDatabaseTransaction();
 	}
 
-	public function commitTransaction(): void {
+	public function commitDatabaseTransaction(): void {
 		Db::commit();
 	}
 
-	public function rollbackTransaction(): void {
+	public function rollbackDatabaseTransaction(): void {
 		Db::rollBack();
 	}
 
-	public function createTransaction(TransactionDTO $data): void {
+	public function create(TransactionDTO $data): void {
 		Db::table('transactions')->insert([
 			'payer_id' => $data->payerId,
 			'payee_id' => $data->payeeId,

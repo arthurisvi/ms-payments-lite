@@ -5,12 +5,12 @@ use Modules\Transaction\DTOs\TransactionDTO;
 
 interface TransactionRepositoryInterface {
 
-	public function beginTransaction(): void;
+	public function beginDatabaseTransaction(): void;
 
-	public function commitTransaction(): void;
+	public function commitDatabaseTransaction(): void;
 
-	public function rollbackTransaction(): void;
+	public function rollbackDatabaseTransaction(): void;
 
-	public function createTransaction(TransactionDTO $data): void;
+	public function create(TransactionDTO $data): void;
 
 }
