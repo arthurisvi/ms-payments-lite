@@ -3,6 +3,7 @@
 namespace Modules\User\Service;
 use Modules\User\DTOs\UserTransactionDTO;
 use Modules\Wallet\Service\WalletService;
+use Modules\User\Repository\UserRepositoryInterface;
 
 class UserService {
 
