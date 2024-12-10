@@ -7,6 +7,8 @@ use Modules\Transaction\Exception\MerchantCannotTransactionMoneyException;
 use Modules\Transaction\Exception\UnauthorizedTransactionException;
 use Modules\User\Service\UserService;
 use Modules\Transaction\Repository\TransactionRepositoryInterface;
+use Modules\User\Enum\UserType;
+use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
 use PHPUnit\Framework\TestCase;
 
@@ -15,23 +17,26 @@ class TransactionServiceTest extends TestCase {
 	private $paymentGateway;
 	private $userService;
 	private $transactionService;
+	private $walletService;
 
 	protected function setUp(): void {
 		$this->transactionRepository = $this->createMock(TransactionRepositoryInterface::class);
 		$this->paymentGateway = $this->createMock(PaymentGatewayInterface::class);
 		$this->userService = $this->createMock(UserService::class);
+		$this->walletService = $this->createMock(WalletService::class);
 
 		$this->transactionService = new TransactionService(
 			$this->transactionRepository,
 			$this->paymentGateway,
-			$this->userService
+			$this->userService,
+			$this->walletService
 		);
 	}
 
 	public function testPayerTypeMerchantThrowsException(): void {
 		$this->userService
-			->method('getUserTransactionData')
-			->willReturn(new UserTransactionDTO('payer123', 2, 100.0));
+			->method('getUserDataToTransaction')
+			->willReturn(new UserTransactionDTO('payer123', UserType::MERCHANT, 100.0));
 
 		$this->expectException(MerchantCannotTransactionMoneyException::class);
 
@@ -40,8 +45,8 @@ class TransactionServiceTest extends TestCase {
 
 	public function testInsufficientBalanceThrowsException(): void {
 		$this->userService
-			->method('getUserTransactionData')
-			->willReturn(new UserTransactionDTO('payer123', 1, 30.0));
+			->method('getUserDataToTransaction')
+			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 30.0));
 
 		$this->expectException(InsufficientBalanceException::class);
 
@@ -51,8 +56,8 @@ class TransactionServiceTest extends TestCase {
 	public function testUnauthorizedTransactionThrowsException(): void {
 
 		$this->userService
-			->method('getUserTransactionData')
-			->willReturn(new UserTransactionDTO('payer123', 1, 100.0));
+			->method('getUserDataToTransaction')
+			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 100.0));
 
 		$this->paymentGateway
 			->method('authorizeTransaction')

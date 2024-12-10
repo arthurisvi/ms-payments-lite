@@ -8,7 +8,9 @@ use Modules\Transaction\Exception\UnauthorizedTransactionException;
 use Modules\Transaction\Exception\MerchantCannotTransactionMoneyException;
 use Modules\Transaction\Repository\TransactionRepositoryInterface;
 use Modules\User\Service\UserService;
+use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
+use Modules\User\Enum\UserType;
 use Modules\Transaction\DTOs\TransactionDTO;
 
 class TransactionService {
@@ -19,17 +21,17 @@ class TransactionService {
 	public function __construct(
 		private TransactionRepositoryInterface $transactionRepository,
 		private PaymentGatewayInterface $paymentGateway,
-		private UserService $userService
+		private UserService $userService,
+		private WalletService $walletService
 	) {}
 
 	public function performTransaction(string $payerId, string $payeeId, float $amount): void {
-		$payerData = $this->userService->getUserTransactionData($payerId);
-
-		$this->validateTransactionConditions($payerData, $amount);
+		$payerData = $this->userService->getUserDataToTransaction($payerId);
 
 		$this->transactionRepository->beginDatabaseTransaction();
 
 		try {
+			$this->validateTransactionConditions($payerData, $amount);
 
 			$transactionData = new TransactionDTO(
 				payerId: $payerId,
@@ -38,9 +40,9 @@ class TransactionService {
 			);
 			$this->transactionRepository->create($transactionData);
 
-			$this->userService->updateBalance($payerId, -$amount, 1);
+			$this->walletService->decrementBalanceByUserId($payerId, $amount);
 
-			$this->userService->updateBalance($payeeId, $amount, 2);
+			$this->walletService->incrementBalanceByUserId($payeeId, $amount);
 
 			if (!$this->paymentGateway->authorizeTransaction()) {
 				throw new UnauthorizedTransactionException();
@@ -57,7 +59,7 @@ class TransactionService {
 	}
 
 	private function validateTransactionConditions(UserTransactionDTO $payerData, float $amount) {
-		if ($payerData->type === 2) {
+		if ($payerData->type === UserType::MERCHANT) {
 			throw new MerchantCannotTransactionMoneyException();
 		}
 
