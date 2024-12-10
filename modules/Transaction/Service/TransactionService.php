@@ -2,6 +2,8 @@
 
 namespace Modules\Transaction\Service;
 
+use Hyperf\Di\Annotation\Inject;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Modules\PaymentGateway\PaymentGatewayInterface;
 use Modules\Transaction\Exception\InsufficientBalanceException;
 use Modules\Transaction\Exception\UnauthorizedTransactionException;
