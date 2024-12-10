@@ -2,6 +2,8 @@
 
 namespace Modules\Wallet\Service;
 
+use Modules\Wallet\Repository\WalletRepositoryInterface;
+
 class WalletService {
 
 	public function __construct(
