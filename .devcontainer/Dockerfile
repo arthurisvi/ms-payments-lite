@@ -46,7 +46,9 @@ WORKDIR /opt/www
 # COPY ./composer.* /opt/www/
 # RUN composer install --no-dev --no-scripts
 
-COPY . /opt/www
+COPY ../ /opt/www
 RUN composer install && php bin/hyperf.php
 
 EXPOSE 9501
+
+CMD ["php", "bin/hyperf.php", "server:watch"]

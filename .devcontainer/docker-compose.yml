@@ -1,14 +1,12 @@
-version: '3.6'
+version: '3.9'
 services:
-  payments-lite:
+  ms-payments-lite:
     container_name: ms-payments-lite
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     volumes:
-      - /opt/www/payments-lite/vendor
-      - ./payments-lite:/opt/www/payments-lite
-      - ./.docker/config/php/php.ini:/etc/php83/php.ini
+      - ../:/opt/www:cached
     ports:
       - 9501:9501
     environment:
@@ -18,6 +16,7 @@ services:
       - payments-database
     networks:
       - docker_default
+
   payments-database:
     container_name: mysql-database
     image: mysql:8
@@ -38,4 +37,3 @@ services:
 networks:
   docker_default:
     external: true
-
