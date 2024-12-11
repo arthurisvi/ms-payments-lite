@@ -2,7 +2,6 @@
 
 namespace Modules\Transaction\Service;
 
-use Hyperf\Di\Annotation\Inject;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Modules\PaymentGateway\PaymentGatewayInterface;
 use Modules\Transaction\Exception\InsufficientBalanceException;
@@ -14,17 +13,16 @@ use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
 use Modules\User\Enum\UserType;
 use Modules\Transaction\DTOs\TransactionDTO;
+use Modules\Transaction\Event\TransactionCompletedEvent;
 
 class TransactionService {
-
- 	#[Inject]
-	private EventDispatcherInterface $eventDispatcher;
 
 	public function __construct(
 		private TransactionRepositoryInterface $transactionRepository,
 		private PaymentGatewayInterface $paymentGateway,
 		private UserService $userService,
-		private WalletService $walletService
+		private WalletService $walletService,
+		private EventDispatcherInterface $eventDispatcher
 	) {}
 
 	public function performTransaction(string $payerId, string $payeeId, float $amount): void {
@@ -53,7 +51,10 @@ class TransactionService {
 			$this->transactionRepository->commitDatabaseTransaction();
 
 			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($payeeId, $amount));
-		} catch (\Exception $e) {
+		} catch (\Throwable $e) {
+			print_r("entrou no catchh\n\n");
+			print_r($e->getMessage());
+			print_r("\n\n");
 			$this->transactionRepository->rollbackDatabaseTransaction();
 			throw $e;
 		}

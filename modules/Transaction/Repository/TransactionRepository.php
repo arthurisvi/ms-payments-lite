@@ -4,11 +4,12 @@ namespace Modules\Transaction\Repository;
 
 use Hyperf\DbConnection\Db;
 use Modules\Transaction\DTOs\TransactionDTO;
+use Modules\Transaction\Model\Transaction;
 
 class TransactionRepository implements TransactionRepositoryInterface {
 
 	public function beginDatabaseTransaction(): void {
-		Db::beginDatabaseTransaction();
+		Db::beginTransaction();
 	}
 
 	public function commitDatabaseTransaction(): void {
@@ -20,12 +21,10 @@ class TransactionRepository implements TransactionRepositoryInterface {
 	}
 
 	public function create(TransactionDTO $data): void {
-		Db::table('transactions')->insert([
+		Transaction::create([
 			'payer_id' => $data->payerId,
 			'payee_id' => $data->payeeId,
-			'amount' => $data->amount,
-			'created_at' => now(),
-			'updated_at' => now(),
+			'value' => $data->amount,
 		]);
 	}
 }

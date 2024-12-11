@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Modules\Transaction\Http\Controller;
 
 use App\Controller\AbstractController;
-use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\Contract\ResponseInterface;
 use Modules\Transaction\Service\TransactionService;
 use Modules\Transaction\Http\Request\TransactionRequest;
 
@@ -27,9 +25,9 @@ class TransactionController extends AbstractController
                 $data['value']
             );
 
-            return response()->noContent();
+            return $this->response->withStatus(204);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return $this->response->json(['message' => $e->getMessage()], 400);
         }
     }
 }
