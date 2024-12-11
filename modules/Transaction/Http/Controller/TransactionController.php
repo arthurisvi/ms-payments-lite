@@ -14,20 +14,15 @@ class TransactionController extends AbstractController
         private TransactionService $transactionService,
     ) {}
 
-    public function transfer(TransactionRequest $request)
-    {
+    public function transfer(TransactionRequest $request) {
         $data = $request->validated();
 
-        try {
-            $this->transactionService->performTransaction(
-                $data['payer'],
-                $data['payee'],
-                $data['value']
-            );
+        $this->transactionService->performTransaction(
+            $data['payer'],
+            $data['payee'],
+            $data['value']
+        );
 
-            return $this->response->withStatus(204);
-        } catch (\Exception $e) {
-            return $this->response->json(['message' => $e->getMessage()], 400);
-        }
+        return $this->response->withStatus(204);
     }
 }
