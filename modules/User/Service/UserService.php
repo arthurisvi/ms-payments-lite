@@ -2,6 +2,7 @@
 
 namespace Modules\User\Service;
 use Modules\User\DTOs\UserTransactionDTO;
+use Modules\User\Exception\UserNotFoundException;
 use Modules\Wallet\Service\WalletService;
 use Modules\User\Repository\UserRepositoryInterface;
 
@@ -15,8 +16,8 @@ class UserService {
 	public function getUserDataToTransaction(string $userId): UserTransactionDTO {
 		$user = $this->userRepository->getById($userId);
 
-		if (!$user) {
-			// TO DO: disparar erro
+		if (empty($user)) {
+			throw new UserNotFoundException();
 		}
 
 		$balance = $this->walletService->getBalanceByUserId($userId);

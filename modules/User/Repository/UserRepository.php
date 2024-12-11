@@ -8,8 +8,12 @@ use Modules\User\Model\User;
 
 class UserRepository implements UserRepositoryInterface {
 
-	public function getById(string $id): UserDTO {
+	public function getById(string $id): UserDTO|array {
 		$user = User::find($id);
+
+		if (!$user) {
+			return [];
+		}
 
 		return new UserDTO(
 			id: $user->id,
