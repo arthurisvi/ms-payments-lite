@@ -13,8 +13,10 @@ class ServiceExceptionHandler extends ExceptionHandler {
 	public function handle(Throwable $throwable, ResponseInterface $response) {
 		if ($throwable instanceof BaseServiceException) {
 			$data = json_encode([
-				'code' => $throwable->getCode(),
-				'message' => $throwable->getMessage(),
+				'error' => [
+					'code' => $throwable->getCode(),
+					'message' => $throwable->getMessage()
+				]
 			], JSON_UNESCAPED_UNICODE);
 
 			$this->stopPropagation();
