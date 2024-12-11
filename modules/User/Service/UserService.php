@@ -8,17 +8,18 @@ use Modules\User\Repository\UserRepositoryInterface;
 class UserService {
 
 	public function __construct(
-		private UserRepositoryInterface $userRepository
+		private UserRepositoryInterface $userRepository,
+		private WalletService $walletService
 	) {}
 
 	public function getUserDataToTransaction(string $userId): UserTransactionDTO {
 		$user = $this->userRepository->getById($userId);
 
 		if (!$user) {
-			throw new UserNotFoundException("User with ID {$userId} not found.");
+			// TO DO: disparar erro
 		}
 
-		$balance = (new WalletService())->getBalanceByUserId($userId);
+		$balance = $this->walletService->getBalanceByUserId($userId);
 
 		return new UserTransactionDTO(
 			id: $user->id,
