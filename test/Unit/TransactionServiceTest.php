@@ -11,6 +11,7 @@ use Modules\User\Enum\UserType;
 use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class TransactionServiceTest extends TestCase {
 	private $transactionRepository;
@@ -29,7 +30,8 @@ class TransactionServiceTest extends TestCase {
 			$this->transactionRepository,
 			$this->paymentGateway,
 			$this->userService,
-			$this->walletService
+			$this->walletService,
+			$this->createMock(EventDispatcherInterface::class)
 		);
 	}
 
