@@ -21,7 +21,7 @@ Serviço que simula uma plataforma de pagamentos simplificada. Sua principal fun
 
 ## Arquitetura da Aplicação
 
-### Arquitetura modular
+### 1. Arquitetura modular
 
 A **arquitetura modular** é um paradigma de design de software que divide um sistema complexo em componentes menores, independentes e coesos, conhecidos como módulos. Cada módulo encapsula uma funcionalidade específica e interage com outros módulos através de interfaces bem definidas.
 
@@ -33,10 +33,13 @@ Os principais benefícios da arquitetura modular incluem:
 Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão do código se torna mais fácil, facilitando a colaboração entre desenvolvedores.
 - **Teste:** A modularidade facilita a criação de testes unitários, pois cada módulo pode ser testado isoladamente.
 
-### Event Bus
+### 2. Event Bus
 
 
-### Componentes do Software
+### 3. Design Patterns
+
+
+### 4. Componentes do Software
 
 ---
 
