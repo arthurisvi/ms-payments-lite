@@ -1,63 +1,107 @@
-# Introduction
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+# ms-payments-lite
 
-# Requirements
+Serviço que simula uma plataforma de pagamentos simplificada. Sua principal função é possibilitar a realização de transferência de dinheiro entre usuários.
 
-Hyperf has some requirements for the system environment, it can only run under Linux and Mac environment, but due to the development of Docker virtualization technology, Docker for Windows can also be used as the running environment under Windows.
+---
 
-The various versions of Dockerfile have been prepared for you in the [hyperf/hyperf-docker](https://github.com/hyperf/hyperf-docker) project, or directly based on the already built [hyperf/hyperf](https://hub.docker.com/r/hyperf/hyperf) Image to run.
+## Índice
+- [Tecnologias](#tecnologias)
+- [Arquitetura da Aplicação](#arquitetura-da-aplicação)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Configuração Inicial](#configuração-inicial)
+---
 
-When you don't want to use Docker as the basis for your running environment, you need to make sure that your operating environment meets the following requirements:  
+## Tecnologias
+ - PHP 8.3
+ - Swoole 5.0
+ - HyperF 
+ - MySQL 8
+ - Redis
 
- - PHP >= 8.1
- - Any of the following network engines
-   - Swoole PHP extension >= 5.0，with `swoole.use_shortname` set to `Off` in your `php.ini`
-   - Swow PHP extension >= 1.3
- - JSON PHP extension
- - Pcntl PHP extension
- - OpenSSL PHP extension （If you need to use the HTTPS）
- - PDO PHP extension （If you need to use the MySQL Client）
- - Redis PHP extension （If you need to use the Redis Client）
- - Protobuf PHP extension （If you need to use the gRPC Server or Client）
+## Arquitetura da Aplicação
 
-# Installation using Composer
+### Arquitetura modular
 
-The easiest way to create a new Hyperf project is to use [Composer](https://getcomposer.org/). If you don't have it already installed, then please install as per [the documentation](https://getcomposer.org/download/).
+A **arquitetura modular** é um paradigma de design de software que divide um sistema complexo em componentes menores, independentes e coesos, conhecidos como módulos. Cada módulo encapsula uma funcionalidade específica e interage com outros módulos através de interfaces bem definidas.
 
-To create your new Hyperf project:
+Os principais benefícios da arquitetura modular incluem:
+
+- **Facilidade de manutenção:** Ao isolar funcionalidades em módulos distintos, as alterações em uma parte do sistema tendem a ter um impacto menor em outras áreas, facilitando a correção de bugs e a implementação de novas funcionalidades.
+- **Reusabilidade:** Módulos bem projetados podem ser reutilizados em diferentes projetos, reduzindo o tempo de desenvolvimento e aumentando a qualidade do software.
+- **Escalabilidade:** A arquitetura modular permite que o sistema seja escalado de forma mais eficiente, adicionando ou removendo módulos conforme necessário.
+Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão do código se torna mais fácil, facilitando a colaboração entre desenvolvedores.
+- **Teste:** A modularidade facilita a criação de testes unitários, pois cada módulo pode ser testado isoladamente.
+
+### Event Bus
+
+
+### Componentes do Software
+
+---
+
+## Estrutura do Projeto
+
+### Camadas e Pastas
+
+1. **modules/**
+   Contém os diferentes domínios da aplicação, cada um com sua própria organização, podendo ou não ter subdiretórios. A ideia é que cada módulo seja um contexto independente que expõe apenas uma porta de entrada (contratos bem definidos) para o restante dos módulos:
+   - **Repository/**: Contém as classes responsáveis por acessar e persistir dados em um banco de dados. Por sua vez, nesse diretório existe uma ocorrência da Interface e uma implementação concreta.
+   - **Service/**: Contém as classes que tratam da lógica de negócio da aplicação, encapsulando as regras de negócio e orquestrando dados. No contexto dessa aplicação modular são as classes expostas (API) para comunicação entre módulos.
+   - **Exception/**: Contém as classes de exceção personalizadas da aplicação.
+   - **Event/**: Contém as classes que representam os objetos de eventos do sistema.
+   - **DTOs/**: Contém as classes de Data Transfer Object (DTO), utilizadas para transferir e representar dados entre camadas da aplicação.
+   - **Model/**: Contém as classes que representam um espelho da tabela do banco de dados. Este componente está fortemente acoplado ao banco relacional, através do EloquentORM.
+   - **Http/**: Contém as camadas responsáveis por lidar com requisições HTTP.
+     - **Controller/**: Contém as classes de controladores da API REST.
+     - **Request/**: Contém as classes de validação de requisições da API REST.
+
+2. **app/**
+   Esta camada possui alguns componentes padrões que são compartilhados entre a aplicação (ex: AbstractController, Model, ExceptionHandler).
+
+3. **config/**
+   Engloba os arquivos de configurações que estão amarrados ao framework, bem como drivers de banco de dados, middlewares, container DI, loggers, etc
+
+5. **test/**
+   Contém pastas relacionadas a testes:
+   - **Unit/**: Esta pasta abriga testes unitários, onde se verifica o funcionamento isolado de um método, desconsiderando comportamentos externos.
+   - **Integration/**: Esta pasta abriga testes de integração, onde se verifica a interação entre diferentes componentes do sistema.
+  
+---
+
+## Configuração inicial
+
+### Pré-requisitos
+- Docker e docker-compose
+
+#### Passo 1: Crie o .env
 
 ```bash
-composer create-project hyperf/hyperf-skeleton path/to/install
+cp .env.example .env
 ```
 
-If your development environment is based on Docker you can use the official Composer image to create a new Hyperf project:
+#### Passo 2: Acesse o diretório .devcontainer
 
 ```bash
-docker run --rm -it -v $(pwd):/app composer create-project --ignore-platform-reqs hyperf/hyperf-skeleton path/to/install
+cd .devcontainer
 ```
 
-# Getting started
-
-Once installed, you can run the server immediately using the command below.
+#### Passo 3: Build dos containers com Docker Compose
 
 ```bash
-cd path/to/install
-php bin/hyperf.php start
+docker-compose build
 ```
 
-Or if in a Docker based environment you can use the `docker-compose.yml` provided by the template:
+#### Passo 4: Subindo todos os serviços com Docker Compose
 
 ```bash
-cd path/to/install
-docker-compose up
+docker-compose up -d
+```
+#### Passo 5: Acesse o container e execute o comando para criação do banco de dados
+
+```bash
+docker-compose exec ms-payments-lite php bin/hyperf.php migrate
 ```
 
-This will start the cli-server on port `9501`, and bind it to all network interfaces. You can then visit the site at `http://localhost:9501/` which will bring up Hyperf default home page.
-
-## Hints
-
-- A nice tip is to rename `hyperf-skeleton` of files like `composer.json` and `docker-compose.yml` to your actual project name.
-- Take a look at `config/routes.php` and `app/Controller/IndexController.php` to see an example of a HTTP entrypoint.
-
-**Remember:** you can always replace the contents of this README.md file to something that fits your project description.
+#### Passo 6: Verifique a aplicação rodando em ```http://localhost:9501```
+---
