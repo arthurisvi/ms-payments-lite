@@ -20,11 +20,13 @@ class TransactionRepository implements TransactionRepositoryInterface {
 		Db::rollBack();
 	}
 
-	public function create(TransactionDTO $data): void {
-		Transaction::create([
+	public function create(TransactionDTO $data): string {
+		$transaction = Transaction::create([
 			'payer_id' => $data->payerId,
 			'payee_id' => $data->payeeId,
 			'value' => $data->amount,
 		]);
+
+		return $transaction->id;
 	}
 }

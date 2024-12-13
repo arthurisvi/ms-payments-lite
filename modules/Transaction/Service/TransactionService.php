@@ -26,7 +26,7 @@ class TransactionService {
 		private EventDispatcherInterface $eventDispatcher
 	) {}
 
-	public function performTransaction(string $payerId, string $payeeId, float $amount): void {
+	public function performTransaction(string $payerId, string $payeeId, float $amount): ?string {
 		$payerData = $this->userService->getUserDataToTransaction($payerId);
 
 		$this->transactionRepository->beginDatabaseTransaction();
@@ -39,7 +39,8 @@ class TransactionService {
 				payeeId: $payeeId,
 				amount: $amount
 			);
-			$this->transactionRepository->create($transactionData);
+
+			$transactionId = $this->transactionRepository->create($transactionData);
 
 			$this->walletService->decrementBalanceByUserId($payerId, $amount);
 
@@ -63,6 +64,8 @@ class TransactionService {
 			);
 
 			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($transactionInfo));
+
+			return $transactionId;
 		} catch (\Throwable $e) {
 			print_r("entrou no catchh\n\n");
 			print_r($e->getMessage());
@@ -71,6 +74,7 @@ class TransactionService {
 			throw $e;
 		}
 
+		return null;
 	}
 
 	private function validateTransactionConditions(UserTransactionDTO $payerData, float $amount) {

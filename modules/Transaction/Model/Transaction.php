@@ -33,6 +33,12 @@ class Transaction extends Model
      */
     protected array $casts = ['created_at' => 'datetime', 'updated_at' => 'datetime'];
 
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        $this->setIncrementing(false);
+        $this->setKeyType('string');
+    }
+
     public function creating(Creating $event) {
         if (empty($this->id)) {
             $this->id = Guid::uuid4()->toString();

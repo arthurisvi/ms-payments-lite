@@ -17,12 +17,29 @@ class TransactionController extends AbstractController
     public function transfer(TransactionRequest $request) {
         $data = $request->validated();
 
-        $this->transactionService->performTransaction(
+        $transactionId = $this->transactionService->performTransaction(
             $data['payer'],
             $data['payee'],
             $data['value']
         );
 
-        return $this->response->withStatus(204);
+        if (!$transactionId) {
+            return $this->response
+            ->withStatus(400)
+            ->json([
+                'error' => [
+                    'code' => 0,
+                    'message' => 'Não foi possível realizar a transação.'
+                ]
+            ], 400);
+        }
+
+        return $this->response
+            ->withStatus(201)
+            ->json([
+                'data' => [
+                    'id' => $transactionId
+                ]
+        ], 201);
     }
 }
