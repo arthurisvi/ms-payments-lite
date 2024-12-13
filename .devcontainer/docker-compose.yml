@@ -34,6 +34,18 @@ services:
       TZ: America/Sao_Paulo
     networks:
       - docker_default
+
+  payments-redis:
+    container_name: redis-database
+    image: redis:alpine
+    ports:
+      - "6399:6379"
+    command: redis-server --requirepass redis123
+    environment:
+      REDIS_PASSWORD: "redis123"
+    networks:
+      - docker_default
+
 networks:
   docker_default:
     external: true
