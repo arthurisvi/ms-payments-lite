@@ -13,6 +13,7 @@ use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
 use Modules\User\Enum\UserType;
 use Modules\Transaction\DTOs\TransactionDTO;
+use Modules\Transaction\DTOs\TransactionInfoDTO;
 use Modules\Transaction\Event\TransactionCompletedEvent;
 
 class TransactionService {
@@ -50,7 +51,18 @@ class TransactionService {
 
 			$this->transactionRepository->commitDatabaseTransaction();
 
-			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($payeeId, $amount));
+			$transactionInfo = new TransactionInfoDTO(
+				transactionId: 'teste',
+				payerId: $payerId,
+				payeeId: $payeeId,
+				payeeName: 'teste nome recebedor',
+				payerName: 'teste nome pagador',
+				payeeEmail: 'testeemail@recebedor',
+				payerEmail: 'testeemail@pagador',
+				amount: $amount
+			);
+
+			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($transactionInfo));
 		} catch (\Throwable $e) {
 			print_r("entrou no catchh\n\n");
 			print_r($e->getMessage());
