@@ -7,9 +7,10 @@ Serviço que simula uma plataforma de pagamentos simplificada. Sua principal fun
 
 ## Índice
 - [Tecnologias](#tecnologias)
+- [Configuração Inicial](#configuração-inicial)
 - [Arquitetura da Aplicação](#arquitetura-da-aplicação)
 - [Estrutura do Projeto](#estrutura-do-projeto)
-- [Configuração Inicial](#configuração-inicial)
+- [Melhorias Futuras](#melhorias-futuras)
 ---
 
 ## Tecnologias
@@ -18,6 +19,43 @@ Serviço que simula uma plataforma de pagamentos simplificada. Sua principal fun
  - HyperF 
  - MySQL 8
  - Redis
+
+## Configuração inicial
+
+### Pré-requisitos
+- Docker e docker-compose
+
+#### Passo 1: Crie o .env
+
+```bash
+cp .env.example .env
+```
+
+#### Passo 2: Acesse o diretório .devcontainer
+
+```bash
+cd .devcontainer
+```
+
+#### Passo 3: Build dos containers com Docker Compose
+
+```bash
+docker-compose build
+```
+
+#### Passo 4: Subindo todos os serviços com Docker Compose
+
+```bash
+docker-compose up -d
+```
+#### Passo 5: Acesse o container e execute o comando para criação do banco de dados
+
+```bash
+docker-compose exec ms-payments-lite php bin/hyperf.php migrate
+```
+
+#### Passo 6: Verifique a aplicação rodando em ```http://localhost:9501```
+---
 
 ## Arquitetura da Aplicação
 
@@ -72,39 +110,4 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
   
 ---
 
-## Configuração inicial
-
-### Pré-requisitos
-- Docker e docker-compose
-
-#### Passo 1: Crie o .env
-
-```bash
-cp .env.example .env
-```
-
-#### Passo 2: Acesse o diretório .devcontainer
-
-```bash
-cd .devcontainer
-```
-
-#### Passo 3: Build dos containers com Docker Compose
-
-```bash
-docker-compose build
-```
-
-#### Passo 4: Subindo todos os serviços com Docker Compose
-
-```bash
-docker-compose up -d
-```
-#### Passo 5: Acesse o container e execute o comando para criação do banco de dados
-
-```bash
-docker-compose exec ms-payments-lite php bin/hyperf.php migrate
-```
-
-#### Passo 6: Verifique a aplicação rodando em ```http://localhost:9501```
----
+## Melhorias Futuras
