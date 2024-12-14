@@ -2,13 +2,13 @@
 
 namespace Modules\PaymentGateway;
 
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\ClientFactory;
 
 class Hyperfpay implements PaymentGatewayInterface {
 
-	public function __construct(
-		private ClientFactory $clientFactory
-	) {}
+	#[Inject]
+	private ClientFactory $clientFactory;
 
 	public function authorizeTransaction(): bool {
 		$client = $this->clientFactory->create();
