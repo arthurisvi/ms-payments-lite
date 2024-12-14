@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Modules\Notification;
 
-use Hyperf\Context\ApplicationContext;
 use Modules\Transaction\Event\TransactionCompletedEvent;
 use Hyperf\Event\Annotation\Listener;
 use Psr\Container\ContainerInterface;
 use Hyperf\Event\Contract\ListenerInterface;
+use Modules\User\Service\UserService;
 
 #[Listener]
 class NotifyTransactionCompletedListener implements ListenerInterface  {
 
     public function __construct(
         protected ContainerInterface $container,
-        protected NotificationService $notificationService
+        protected NotificationService $notificationService,
+        private UserService $userService
     ){}
 
     public function listen(): array {
@@ -24,18 +25,19 @@ class NotifyTransactionCompletedListener implements ListenerInterface  {
         ];
     }
 
-    public function process(object $transaction): void {
-        print_r("RECEBEU EVENTOO\n\n");
-        print_r($transaction);
-        print_r("\n\n");
+    public function process(object $transactionEvent): void {
+        $payee = $this->userService->getUserDataById($transactionEvent->payeeId);
+        $payer = $this->userService->getUserDataById($transactionEvent->payerId);
 
-        $notification = new NotificationDTO(
-            recipientIdentifier: $transaction->payeeEmail,
-            subject: 'Você recebeu uma nova transferência!',
-            message: "Olá, {$transaction->payeeName}! Você acaba de receber uma
-            transferência no valor de {$transaction->amount} de {$transaction->payerName}."
-        );
+        $context = (object)[
+            'payee' => $payee,
+            'payer' => $payer,
+            'amount' => $transactionEvent->amount,
+        ];
 
-        $this->notificationService->sendAsync($notification);
+        $notificationTemplate = new TransactionNotificationTemplate();
+
+        $this->notificationService->send($context, $notificationTemplate, NotificationChannel::cases());
     }
+
 }

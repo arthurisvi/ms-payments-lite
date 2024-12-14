@@ -13,7 +13,6 @@ use Modules\Wallet\Service\WalletService;
 use Modules\User\DTOs\UserTransactionDTO;
 use Modules\User\Enum\UserType;
 use Modules\Transaction\DTOs\TransactionDTO;
-use Modules\Transaction\DTOs\TransactionInfoDTO;
 use Modules\Transaction\Event\TransactionCompletedEvent;
 
 class TransactionService {
@@ -42,28 +41,17 @@ class TransactionService {
 
 			$transactionId = $this->transactionRepository->create($transactionData);
 
-			$this->walletService->decrementBalanceByUserId($payerId, $amount);
+			/*$this->walletService->decrementBalanceByUserId($payerId, $amount);
 
 			$this->walletService->incrementBalanceByUserId($payeeId, $amount);
 
 			if (!$this->paymentGateway->authorizeTransaction()) {
 				throw new UnauthorizedTransactionException();
-			}
+			}*/
 
 			$this->transactionRepository->commitDatabaseTransaction();
 
-			$transactionInfo = new TransactionInfoDTO(
-				transactionId: 'teste',
-				payerId: $payerId,
-				payeeId: $payeeId,
-				payeeName: 'teste nome recebedor',
-				payerName: 'teste nome pagador',
-				payeeEmail: 'testeemail@recebedor',
-				payerEmail: 'testeemail@pagador',
-				amount: $amount
-			);
-
-			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($transactionInfo));
+			$this->eventDispatcher->dispatch(new TransactionCompletedEvent($transactionId, $transactionData));
 
 			return $transactionId;
 		} catch (\Throwable $e) {

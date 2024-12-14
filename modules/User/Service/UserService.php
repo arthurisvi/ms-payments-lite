@@ -1,6 +1,8 @@
 <?php
 
 namespace Modules\User\Service;
+
+use Modules\User\DTOs\UserDTO;
 use Modules\User\DTOs\UserTransactionDTO;
 use Modules\User\Exception\UserNotFoundException;
 use Modules\Wallet\Service\WalletService;
@@ -12,6 +14,10 @@ class UserService {
 		private UserRepositoryInterface $userRepository,
 		private WalletService $walletService
 	) {}
+
+	public function getUserDataById(string $userId): ?UserDTO {
+		return $this->userRepository->getById($userId);
+	}
 
 	public function getUserDataToTransaction(string $userId): UserTransactionDTO {
 		$user = $this->userRepository->getById($userId);

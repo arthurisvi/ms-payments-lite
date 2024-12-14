@@ -2,13 +2,13 @@
 
 namespace Modules\Notification;
 
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\ClientFactory;
 
 class NotificationEmailStrategy implements NotificationStrategyInterface {
 
-	public function __construct(
-		private ClientFactory $clientFactory
-	) {}
+	#[Inject]
+	private ClientFactory $clientFactory;
 
 	public function sendNotification(NotificationDTO $notification): void {
 		try {
@@ -21,7 +21,6 @@ class NotificationEmailStrategy implements NotificationStrategyInterface {
 					'message' => $notification->message
 				]
 			]);
-
 		} catch (\Throwable $e) {
 			print_r("Erro ao tentar enviar a notificação: " . $e->getMessage());
 		}
