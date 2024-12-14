@@ -120,3 +120,4 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
 1. [Lock pessimista](https://medium.com/@abhirup.acharya009/managing-concurrent-access-optimistic-locking-vs-pessimistic-locking-0f6a64294db7) no fluxo de transação
 2. [Filas assíncronas](https://www.hyperf.wiki/3.1/#/en/async-queue?id=async-queue) para o envio de Notificações
 3. [Cache](https://www.hyperf.wiki/3.1/#/en/cache?id=cache) na obtenção de dados
+4. Uso de [corrotinas](https://www.hyperf.wiki/3.1/#/en/coroutine?id=coroutine)
