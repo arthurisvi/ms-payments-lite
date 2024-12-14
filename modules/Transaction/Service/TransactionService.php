@@ -2,6 +2,7 @@
 
 namespace Modules\Transaction\Service;
 
+use Hyperf\Di\Annotation\Inject;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Modules\PaymentGateway\PaymentGatewayInterface;
 use Modules\Transaction\Exception\InsufficientBalanceException;
@@ -17,12 +18,14 @@ use Modules\Transaction\Event\TransactionCompletedEvent;
 
 class TransactionService {
 
+	#[Inject()]
+	private EventDispatcherInterface $eventDispatcher;
+
 	public function __construct(
 		private TransactionRepositoryInterface $transactionRepository,
 		private PaymentGatewayInterface $paymentGateway,
 		private UserService $userService,
 		private WalletService $walletService,
-		private EventDispatcherInterface $eventDispatcher
 	) {}
 
 	public function performTransaction(string $payerId, string $payeeId, float $amount): ?string {
