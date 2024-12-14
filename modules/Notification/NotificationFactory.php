@@ -2,16 +2,17 @@
 
 namespace Modules\Notification;
 
-use Modules\Notification\NotificationEmailStrategy;
-use Modules\Notification\NotificationSmsStrategy;
-use Modules\Notification\NotificationStrategyInterface;
+use Modules\Notification\Strategy\NotificationEmailStrategy;
+use Modules\Notification\Strategy\NotificationSmsStrategy;
+use Modules\Notification\Strategy\NotificationStrategyInterface;
+use Modules\Notification\Types\NotificationChannelEnum;
 
 class NotificationFactory {
 
-	public static function createStrategy(NotificationChannel $channel): NotificationStrategyInterface {
+	public static function createStrategy(NotificationChannelEnum $channel): NotificationStrategyInterface {
 		return match ($channel) {
-			NotificationChannel::EMAIL => new NotificationEmailStrategy(),
-			NotificationChannel::SMS => new NotificationSmsStrategy(),
+			NotificationChannelEnum::EMAIL => new NotificationEmailStrategy(),
+			NotificationChannelEnum::SMS => new NotificationSmsStrategy(),
 		};
 	}
 

@@ -2,7 +2,7 @@
 
 namespace Modules\Notification;
 
-use Modules\Notification\NotificationDTO;
+use Modules\Notification\Types\NotificationDTO;
 
 class NotificationBuilder {
 

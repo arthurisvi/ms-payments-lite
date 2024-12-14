@@ -2,14 +2,15 @@
 
 namespace Modules\Notification;
 
+use Modules\Notification\Types\NotificationChannelEnum;
 use Modules\User\DTOs\UserDTO;
 
 class NotificationRecipientResolver {
 
-	public function resolve(NotificationChannel $channel, UserDTO $user): string {
+	public function resolve(NotificationChannelEnum $channel, UserDTO $user): string {
 		return match ($channel) {
-			NotificationChannel::EMAIL => $user->email,
-			NotificationChannel::SMS => /*$user->phone*/ '',
+			NotificationChannelEnum::EMAIL => $user->email,
+			NotificationChannelEnum::SMS => /*$user->phone*/ '',
 		};
 	}
 }

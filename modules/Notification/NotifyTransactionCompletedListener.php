@@ -8,6 +8,8 @@ use Modules\Transaction\Event\TransactionCompletedEvent;
 use Hyperf\Event\Annotation\Listener;
 use Psr\Container\ContainerInterface;
 use Hyperf\Event\Contract\ListenerInterface;
+use Modules\Notification\Template\TransactionNotificationTemplate;
+use Modules\Notification\Types\NotificationChannelEnum;
 use Modules\User\Service\UserService;
 
 #[Listener]
@@ -37,7 +39,7 @@ class NotifyTransactionCompletedListener implements ListenerInterface  {
 
         $notificationTemplate = new TransactionNotificationTemplate();
 
-        $this->notificationService->send($context, $notificationTemplate, NotificationChannel::cases());
+        $this->notificationService->send($context, $notificationTemplate, NotificationChannelEnum::cases());
     }
 
 }

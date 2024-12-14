@@ -1,8 +1,9 @@
 <?php
 
-namespace Modules\Notification;
+namespace Modules\Notification\Template;
 
 class TransactionNotificationTemplate implements NotificationTemplateInterface {
+
 	public function getSubject(): string {
 		return 'Você recebeu uma nova transferência!';
 	}

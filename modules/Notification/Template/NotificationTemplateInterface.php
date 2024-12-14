@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Notification;
+namespace Modules\Notification\Template;
 
 interface NotificationTemplateInterface {
 	public function getSubject(): string;

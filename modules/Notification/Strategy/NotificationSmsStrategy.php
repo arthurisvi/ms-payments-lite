@@ -1,6 +1,8 @@
 <?php
 
-namespace Modules\Notification;
+namespace Modules\Notification\Strategy;
+
+use Modules\Notification\Types\NotificationDTO;
 
 class NotificationSmsStrategy implements NotificationStrategyInterface {
 

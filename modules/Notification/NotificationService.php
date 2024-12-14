@@ -3,6 +3,7 @@
 namespace Modules\Notification;
 
 use Hyperf\Di\Annotation\Inject;
+use Modules\Notification\Template\NotificationTemplateInterface;
 
 class NotificationService {
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\Notification;
+namespace Modules\Notification\Strategy;
 
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Guzzle\ClientFactory;
+use Modules\Notification\Types\NotificationDTO;
 
 class NotificationEmailStrategy implements NotificationStrategyInterface {
 
