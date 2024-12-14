@@ -38,7 +38,7 @@ class TransactionServiceTest extends TestCase {
 	public function testPayerTypeMerchantThrowsException(): void {
 		$this->userService
 			->method('getUserDataToTransaction')
-			->willReturn(new UserTransactionDTO('payer123', UserType::MERCHANT, 100.0));
+			->willReturn(new UserTransactionDTO('payer123', UserType::MERCHANT, 100.0, 'id'));
 
 		$this->expectException(MerchantCannotTransactionMoneyException::class);
 
@@ -48,7 +48,7 @@ class TransactionServiceTest extends TestCase {
 	public function testInsufficientBalanceThrowsException(): void {
 		$this->userService
 			->method('getUserDataToTransaction')
-			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 30.0));
+			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 30.0, 'id'));
 
 		$this->expectException(InsufficientBalanceException::class);
 
@@ -59,7 +59,7 @@ class TransactionServiceTest extends TestCase {
 
 		$this->userService
 			->method('getUserDataToTransaction')
-			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 100.0));
+			->willReturn(new UserTransactionDTO('payer123', UserType::COMMON, 100.0, 'id'));
 
 		$this->paymentGateway
 			->method('authorizeTransaction')
