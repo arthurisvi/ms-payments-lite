@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
+use Hyperf\DbConnection\Db;
+
 /**
  * This file is part of Hyperf.
  *
@@ -27,4 +30,17 @@ Hyperf\Di\ClassLoader::init();
 
 $container = require BASE_PATH . '/config/container.php';
 
+$config = $container->get(\Hyperf\Contract\ConfigInterface::class);
+$config->set('databases.default', $config->get('databases.test'));
+
 $container->get(Hyperf\Contract\ApplicationInterface::class);
+
+Swoole\Coroutine\run(function () use ($container) {
+	Db::connection('test')->statement('DROP DATABASE IF EXISTS `payments-database-test`');
+	Db::connection('test')->statement('CREATE DATABASE `payments-database-test` CHARACTER SET utf8 COLLATE utf8_general_ci');
+
+	$container->get('Hyperf\Database\Commands\Migrations\MigrateCommand')->run(
+		new Symfony\Component\Console\Input\StringInput(''),
+		new Symfony\Component\Console\Output\ConsoleOutput()
+	);
+});
