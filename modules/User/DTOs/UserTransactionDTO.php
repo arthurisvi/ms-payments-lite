@@ -10,6 +10,7 @@ class UserTransactionDTO {
 		public readonly string $id,
 		public readonly UserType $type,
 		public readonly float $balance,
+		public ?string $walletId
 	) {}
 
 }

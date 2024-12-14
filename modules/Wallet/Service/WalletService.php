@@ -10,19 +10,15 @@ class WalletService {
 		private WalletRepositoryInterface $walletRepository,
 	) {}
 
-	public function getBalanceByUserId(string $userId): float {
-		return $this->walletRepository->getBalanceByUserId($userId);
+	public function incrementBalance(string $walletId, float $amount): void {
+		$wallet = $this->walletRepository->getById($walletId);
+		$newBalance = $wallet->balance + $amount;
+		$this->walletRepository->updateBalance($walletId, $newBalance);
 	}
 
-	public function incrementBalanceByUserId(string $userId, float $amount): void {
-		$currentBalance = $this->walletRepository->getBalanceByUserId($userId);
-		$newBalance = $currentBalance + $amount;
-		$this->walletRepository->updateBalanceByUserId($userId, $newBalance);
+	public function decrementBalance(string $walletId, float $amount): void {
+		$wallet = $this->walletRepository->getById($walletId);
+		$newBalance = $wallet->balance - $amount;
+		$this->walletRepository->updateBalance($walletId, $newBalance);
 	}
-
-	public function decrementBalanceByUserId(string $userId, float $amount): void {
-		$currentBalance = $this->walletRepository->getBalanceByUserId($userId);
-		$newBalance = $currentBalance - $amount;
-		$this->walletRepository->updateBalanceByUserId($userId, $newBalance);
-	}
-}
+ }

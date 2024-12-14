@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\User\Model;
 
+use Hyperf\Database\Model\Relations\HasOne;
 use Hyperf\DbConnection\Model\Model;
+use Modules\Wallet\Model\Wallet;
 
 /**
  * @property string $id
@@ -32,4 +34,14 @@ class User extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['type' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        $this->setIncrementing(false);
+        $this->setKeyType('string');
+    }
+
+    public function wallet(): HasOne {
+        return $this->hasOne(Wallet::class, 'user_id', 'id');
+    }
 }

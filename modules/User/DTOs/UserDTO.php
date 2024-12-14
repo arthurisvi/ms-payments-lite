@@ -12,6 +12,8 @@ class UserDTO {
 		public readonly string $documentId,
 		public readonly string $email,
 		public readonly string $password,
-		public readonly UserType $type
+		public readonly UserType $type,
+		public readonly ?string $walletId = null,
+		public readonly ?float $walletBalance = 0.0
 	) {}
 }

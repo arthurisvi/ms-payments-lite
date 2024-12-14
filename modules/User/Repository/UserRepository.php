@@ -25,4 +25,23 @@ class UserRepository implements UserRepositoryInterface {
 		);
 	}
 
+	public function getByIdWithWallet(string $id): UserDTO|array {
+		$user = User::with('wallet')->find($id);
+
+		if (!$user) {
+			return [];
+		}
+
+		return new UserDTO(
+			id: $user->id,
+			name: $user->name,
+			documentId: $user->document_id,
+			email: $user->email,
+			password: $user->password,
+			type: UserType::from($user->type),
+			walletId: $user->wallet->id,
+			walletBalance: $user->wallet->balance
+		);
+	}
+
 }

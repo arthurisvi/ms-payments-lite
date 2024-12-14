@@ -2,7 +2,9 @@
 
 namespace Modules\Wallet\Repository;
 
+use Modules\Wallet\DTOs\WalletDTO;
+
 interface WalletRepositoryInterface {
-	public function getBalanceByUserId(string $userId): float;
-	public function updateBalanceByUserId(string $userId, float $newBalance): void;
+	public function getById (string $balanceId): ?WalletDTO;
+	public function updateBalance(string $id, float $newBalance): void;
 }

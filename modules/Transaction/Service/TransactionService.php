@@ -27,6 +27,7 @@ class TransactionService {
 
 	public function performTransaction(string $payerId, string $payeeId, float $amount): ?string {
 		$payerData = $this->userService->getUserDataToTransaction($payerId);
+		$payeeData = $this->userService->getUserDataToTransaction($payeeId);
 
 		$this->transactionRepository->beginDatabaseTransaction();
 
@@ -41,13 +42,13 @@ class TransactionService {
 
 			$transactionId = $this->transactionRepository->create($transactionData);
 
-			/*$this->walletService->decrementBalanceByUserId($payerId, $amount);
+			$this->walletService->decrementBalance($payerData->walletId, $amount);
 
-			$this->walletService->incrementBalanceByUserId($payeeId, $amount);
+			$this->walletService->incrementBalance($payeeData->walletId, $amount);
 
 			if (!$this->paymentGateway->authorizeTransaction()) {
 				throw new UnauthorizedTransactionException();
-			}*/
+			}
 
 			$this->transactionRepository->commitDatabaseTransaction();
 

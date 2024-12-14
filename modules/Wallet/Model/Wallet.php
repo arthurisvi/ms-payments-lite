@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Wallet\Model;
 
+use Hyperf\Database\Model\Relations\BelongsTo;
 use Hyperf\DbConnection\Model\Model;
+use Modules\User\Model\User;
 
 /**
  * @property string $id
@@ -29,4 +31,14 @@ class Wallet extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['created_at' => 'datetime', 'updated_at' => 'datetime'];
+
+    public function __construct(array $attributes = []) {
+        parent::__construct($attributes);
+        $this->setIncrementing(false);
+        $this->setKeyType('string');
+    }
+
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
