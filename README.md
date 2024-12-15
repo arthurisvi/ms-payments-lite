@@ -11,6 +11,7 @@ Serviço que simula uma plataforma de pagamentos simplificada. Sua principal fun
 - [Arquitetura da Aplicação](#arquitetura-da-aplicação)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Melhorias Futuras](#melhorias-futuras)
+- [API](#api)
 ---
 
 ## Tecnologias
@@ -88,7 +89,7 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
 - **Teste:** A modularidade facilita a criação de testes unitários, pois cada módulo pode ser testado isoladamente.
 
 ### 2. Event Bus
-É um padrão de arquitetura que permite que diferentes componentes de um sistema se comuniquem de forma desacoplada, através de eventos. Esse padrão é útil em sistemas que precisam de comunicação assíncrona entre diversos módulos ou serviços sem que os módulos precisem saber diretamente uns dos outros
+É um padrão de arquitetura que permite que diferentes componentes de um sistema se comuniquem de forma desacoplada, através de eventos. Esse padrão é útil em sistemas que precisam de comunicação assíncrona entre diversos módulos ou serviços sem que os módulos precisem saber diretamente uns dos outros. 
 
 ### 3. Design Patterns
 **3.1. Repository Pattern:**  padrão de design utilizado para abstrair o acesso a dados, fornecendo uma interface para realizar operações de leitura e gravação sem expor detalhes de implementação (como consultas SQL).
@@ -98,6 +99,7 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
 **3.3. Factory Pattern:** padrão de criação de objetos que fornece uma interface para criar objetos, mas permite que as subclasses decidam qual classe instanciar.
 
 ### 4. Componentes do Software
+![image](https://github.com/user-attachments/assets/38ebf839-99cb-4ef9-a42a-a25f319e97c6)
 
 ---
 
@@ -138,3 +140,9 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
    - [DLQ](https://aws.amazon.com/pt/what-is/dead-letter-queue/)
 4. [Cache](https://www.hyperf.wiki/3.1/#/en/cache?id=cache) na obtenção de dados
 5. Uso de [corrotinas](https://www.hyperf.wiki/3.1/#/en/coroutine?id=coroutine)
+6. Logs nas rotinas críticas do sistema (ex: transação e envio de notificação)
+
+---
+
+## API
+Acesse a documentação detalhada da API [aqui](docs/API.md).
