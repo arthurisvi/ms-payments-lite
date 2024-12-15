@@ -21,8 +21,8 @@ class TransactionServiceIntegrationTest extends TestCase {
 	protected function setUp(): void {
 		$transactionRepository = new TransactionRepository();
 		$this->paymentGateway = $this->createMock(PaymentGatewayInterface::class);
-		$walletService = new WalletService(new WalletRepository);
-		$userService = new UserService(new UserRepository(), $walletService);
+		$walletService = new WalletService(new WalletRepository());
+		$userService = new UserService(new UserRepository());
 
 		$this->transactionService = new TransactionService(
 			$transactionRepository,
