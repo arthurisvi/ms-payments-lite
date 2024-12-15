@@ -17,7 +17,7 @@ Serviço que simula uma plataforma de pagamentos simplificada. Sua principal fun
 ## Tecnologias
  - PHP 8.3
  - Swoole 5.0
- - HyperF 
+ - HyperF
  - MySQL 8
  - Redis
 
@@ -89,14 +89,14 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
 - **Teste:** A modularidade facilita a criação de testes unitários, pois cada módulo pode ser testado isoladamente.
 
 ### 2. Event Bus
-É um padrão de arquitetura que permite que diferentes componentes de um sistema se comuniquem de forma desacoplada, através de eventos. Esse padrão é útil em sistemas que precisam de comunicação assíncrona entre diversos módulos ou serviços sem que os módulos precisem saber diretamente uns dos outros. 
+É um padrão de arquitetura que permite que diferentes componentes de um sistema se comuniquem de forma desacoplada, através de eventos. Esse padrão é útil em sistemas que precisam de comunicação assíncrona entre diversos módulos ou serviços sem que os módulos precisem saber diretamente uns dos outros. Neste serviço, o padrão foi utilizado principalmente para a comunicação com o módulo de Notificações, onde após ser realizada a transação com sucesso é disparado um evento com os dados da transação, permitindo posteriormente que qualquer outro módulo seja um ouvinte do evento para tomar ações.
 
 ### 3. Design Patterns
-**3.1. Repository Pattern:**  padrão de design utilizado para abstrair o acesso a dados, fornecendo uma interface para realizar operações de leitura e gravação sem expor detalhes de implementação (como consultas SQL).
+**3.1. Repository Pattern:**  padrão de design utilizado para abstrair o acesso a dados, fornecendo uma interface para realizar operações de leitura e gravação sem expor detalhes de implementação (como consultas SQL). No projeto, o pattern foi utilizado para facilitar o acesso e comunicação com o banco de dados. (ex: ```TransactionRepository```).
 
-**3.2. Strategy Pattern:** padrão comportamental que permite selecionar uma ação (ou algoritmo) em tempo de execução, delegando o comportamento para diferentes classes que implementam uma interface comum.
+**3.2. Strategy Pattern:** padrão comportamental que permite selecionar uma ação (ou algoritmo) em tempo de execução, delegando o comportamento para diferentes classes que implementam uma interface comum. No contexto desta aplicação, foi aplicado para gerir as diferentes estratégias de canais de notificação (ex: ```NotificationEmailStrategy, NotificationSmsStrategy```)
 
-**3.3. Factory Pattern:** padrão de criação de objetos que fornece uma interface para criar objetos, mas permite que as subclasses decidam qual classe instanciar.
+**3.3. Factory Pattern:** padrão de criação de objetos que fornece uma interface para criar objetos, mas permite que as subclasses decidam qual classe instanciar. Utilizado no software para criação dinâmica e centralizada (```NotificationFactory```) das classes relacionadas a estratégias de notificação.
 
 ### 4. Componentes do Software
 ![image](https://github.com/user-attachments/assets/38ebf839-99cb-4ef9-a42a-a25f319e97c6)
@@ -130,7 +130,7 @@ Compreensão do sistema: Ao dividir o sistema em partes menores, a compreensão 
    Contém pastas relacionadas a testes:
    - **Unit/**: Esta pasta abriga testes unitários, onde se verifica o funcionamento isolado de um método, desconsiderando comportamentos externos.
    - **Integration/**: Esta pasta abriga testes de integração, onde se verifica a interação entre diferentes componentes do sistema.
-  
+
 ---
 
 ## Melhorias Futuras
